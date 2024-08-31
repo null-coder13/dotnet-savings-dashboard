@@ -1,6 +1,3 @@
-using System.Globalization;
-using CsvHelper;
-
 namespace DataAccess;
 
 public class FileRepository : IFileRepository
@@ -8,20 +5,23 @@ public class FileRepository : IFileRepository
     private readonly string _csvFilePath;
     private IEnumerable<Transaction> _transactions;
 
+    // TODO: This class make be changed when implementing database
     public FileRepository()
     {
         _csvFilePath = "./transactions.csv";
-        using var reader = new StreamReader(_csvFilePath);
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        _transactions = csv.GetRecords<Transaction>().ToList();
+        var reader = new FileReader(_csvFilePath);
+        _transactions = reader.ReadFile().ToList();
     }
 
     public FileRepository(string filePath)
     {
         _csvFilePath = filePath;
-        using var reader = new StreamReader(_csvFilePath);
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        _transactions = csv.GetRecords<Transaction>();
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            throw new ArgumentException("File path cannot be null or empty.", nameof(filePath));
+        }
+        var reader = new FileReader(_csvFilePath);
+        _transactions = reader.ReadFile().ToList();
     }
 
     /// <summary>
