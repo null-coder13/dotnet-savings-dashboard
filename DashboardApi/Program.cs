@@ -1,7 +1,21 @@
 using System.Reflection;
+using DashboardApi;
 using DataAccess;
+using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
+{
+    loggerConfiguration
+        .ReadFrom.Configuration(hostingContext.Configuration)
+        .Enrich.FromLogContext();
+});
+Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
+
+builder.Services.AddTransient<GlobalErrorHandlingMiddeware>();
+builder.Services.AddTransient<RequestLogContextMiddleware>();
 
 // Add services to the container.
 builder.Services.AddCors(options =>
@@ -37,6 +51,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSerilogRequestLogging();
+app.UseMiddleware<GlobalErrorHandlingMiddeware>();
+app.UseMiddleware<RequestLogContextMiddleware>();
+
+
 app.UseCors("AllowAllOrigins");
 
 app.UseAuthorization();
@@ -44,3 +63,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

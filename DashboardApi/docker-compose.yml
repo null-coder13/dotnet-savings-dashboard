@@ -1,0 +1,9 @@
+services:
+  seq.logs:
+    image: datalust/seq:latest
+    container_name: seq-logs
+    ports:
+      - "5341:5341"
+      - "8081:80"
+    environment:
+      ACCEPT_EULA: Y
