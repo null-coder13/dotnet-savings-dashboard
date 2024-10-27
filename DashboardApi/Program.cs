@@ -1,6 +1,7 @@
-using System.Reflection;
 using DashboardApi;
-using DataAccess;
+using DashboardApi.DataAccess;
+using DashboardApi.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 
@@ -17,6 +18,13 @@ Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
 builder.Services.AddTransient<GlobalErrorHandlingMiddeware>();
 builder.Services.AddTransient<RequestLogContextMiddleware>();
 
+// Add Sqlite database context
+builder.Services.AddDbContext<FinancesDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("FinancesDb");
+    options.UseSqlite(connectionString);
+});
+
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
@@ -32,13 +40,11 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IFileRepository, FileRepository>();
+builder.Services.AddSingleton<IFileReader, FileReader>();
+builder.Services.AddScoped<IFinancesRepository, FinancesRepository>();
 
 var app = builder.Build();
 

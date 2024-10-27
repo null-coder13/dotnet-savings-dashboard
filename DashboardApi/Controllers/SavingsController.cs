@@ -1,22 +1,19 @@
-using Microsoft.AspNetCore.Http;
+using DashboardApi.Interfaces;
+using DashboardApi.Models;
 using Microsoft.AspNetCore.Mvc;
-using DataAccess;
 using System.Net;
 
 namespace DashboardApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SavingsController : ControllerBase
+public class SavingsController(
+    ILogger<SavingsController> logger,
+    IFileRepository fileRepository,
+    IFinancesRepository financesRepository)
+    : ControllerBase
 {
-    private readonly ILogger<SavingsController> _logger;
-    private readonly IFileRepository _fileRepository;
-
-    public SavingsController(ILogger<SavingsController> logger, IFileRepository fileRepository)
-    {
-        _logger = logger;
-        _fileRepository = fileRepository;
-    }
+    private readonly IFinancesRepository _financesRepository = financesRepository;
 
     /// <summary>
     /// Calculates the total amount in the account by subtracting the sum of all debits from the sum of all credits.
@@ -25,9 +22,9 @@ public class SavingsController : ControllerBase
     [HttpGet("GetTotalAmount")]
     public ActionResult<APIResponse<int>> GetTotalAmount()
     {
-        _logger.LogInformation("GetTotalAmount");
+        logger.LogInformation("GetTotalAmount");
 
-        var totalAmount = _fileRepository.GetTotalAmount();
+        var totalAmount = fileRepository.GetTotalAmount();
 
         APIResponse<decimal> response = new();
         response.Result = totalAmount;
@@ -44,9 +41,9 @@ public class SavingsController : ControllerBase
     [HttpGet("GetMonthlyTotalAmount")]
     public ActionResult<APIResponse<decimal>> GetMonthlyTotalAmount(int month)
     {
-        _logger.LogInformation("GetMonthlyTotalAmount: Getting total amount for month {month}", month);
+        logger.LogInformation("GetMonthlyTotalAmount: Getting total amount for month {month}", month);
 
-        var totalAmount = _fileRepository.GetMonthlyTotalAmount(month);
+        var totalAmount = fileRepository.GetMonthlyTotalAmount(month);
 
         APIResponse<decimal> response = new();
         response.Result = totalAmount;
@@ -62,9 +59,9 @@ public class SavingsController : ControllerBase
     [HttpGet("GetMonthlyTotalAmounts")]
     public ActionResult<APIResponse<List<MonthTotal>>> GetMonthlyTotalAmounts()
     {
-        _logger.LogInformation("GetMonthlyTotalAmounts");
+        logger.LogInformation("GetMonthlyTotalAmounts");
 
-        var monthlyTotalAmounts = _fileRepository.GetMonthlyTotalAmounts();
+        var monthlyTotalAmounts = fileRepository.GetMonthlyTotalAmounts();
 
         APIResponse<List<MonthTotal>> response = new();
         response.Result = monthlyTotalAmounts;
@@ -80,9 +77,9 @@ public class SavingsController : ControllerBase
     [HttpGet("GetUniqueYears")]
     public ActionResult<APIResponse<ICollection<string>>> GetUniqueYears()
     {
-        _logger.LogInformation("GetUniqueYears");
+        logger.LogInformation("GetUniqueYears");
 
-        var uniqueYears = _fileRepository.GetUniqueYears();
+        var uniqueYears = fileRepository.GetUniqueYears();
 
         APIResponse<ICollection<string>> response = new();
         response.Result = uniqueYears;
@@ -100,9 +97,9 @@ public class SavingsController : ControllerBase
     [HttpGet("GetSumOfCategoriesForMonth")]
     public ActionResult<APIResponse<ICollection<CategoryTotal>>> GetSumOfCategoriesForMonth(int month, int year)
     {
-        _logger.LogInformation("GetSumOfCategoriesForMonth: Getting sum of categories for month: {month} year: {year}", month, year);
+        logger.LogInformation("GetSumOfCategoriesForMonth: Getting sum of categories for month: {month} year: {year}", month, year);
 
-        List<(string, decimal)> result = _fileRepository.GetSumOfCategoriesForMonth(month, year);
+        List<(string, decimal)> result = fileRepository.GetSumOfCategoriesForMonth(month, year);
 
         List<CategoryTotal> categoryTotals = new();
         foreach (var (category, amount) in result)
@@ -125,9 +122,9 @@ public class SavingsController : ControllerBase
     [HttpGet("GetSumOfLastGivenMonths")]
     public ActionResult<APIResponse<decimal>> GetSumOfLastGivenMonths(int months)
     {
-        _logger.LogInformation("GetSumOfLastGivenMonths: Getting sum of last {months} months", months);
+        logger.LogInformation("GetSumOfLastGivenMonths: Getting sum of last {months} months", months);
 
-        var result = _fileRepository.GetSumOfLastGivenMonths(months);
+        var result = fileRepository.GetSumOfLastGivenMonths(months);
 
         APIResponse<decimal> response = new();
         response.Result = result;
@@ -144,9 +141,9 @@ public class SavingsController : ControllerBase
     [HttpGet("TransactionsForMonth")]
     public ActionResult<APIResponse<ICollection<Transaction>>> TransactionsForMonth(int month)
     {
-        _logger.LogInformation("TransactionsForMonth: Getting transactions for month {month}", month);
+        logger.LogInformation("TransactionsForMonth: Getting transactions for month {month}", month);
 
-        var result = _fileRepository.GetTransactionsForMonth(month);
+        var result = fileRepository.GetTransactionsForMonth(month);
 
         APIResponse<List<Transaction>> response = new();
         response.Result = result;
