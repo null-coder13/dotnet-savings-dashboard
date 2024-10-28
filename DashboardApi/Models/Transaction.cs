@@ -1,6 +1,6 @@
 using CsvHelper.Configuration.Attributes;
 
-namespace DataAccess;
+namespace DashboardApi.Models;
 
 public class Transaction
 {
@@ -42,5 +42,4 @@ public class Transaction
 
     [Name("Card Ending")]
     public string CardEnding { get; set; } = string.Empty;
-
 }

@@ -1,27 +1,29 @@
-namespace DataAccess;
+using DashboardApi.Interfaces;
+using DashboardApi.Models;
+
+namespace DashboardApi.DataAccess;
 
 public class FileRepository : IFileRepository
 {
     private readonly string _csvFilePath;
     private IEnumerable<Transaction> _transactions;
 
-    // TODO: This class make be changed when implementing database
-    public FileRepository()
+    public FileRepository(IFileReader reader)
     {
         _csvFilePath = "./transactions.csv";
-        var reader = new FileReader(_csvFilePath);
-        _transactions = reader.ReadFile().ToList();
+        // var reader = new DataAccess.FileReader(_csvFilePath);
+        _transactions = reader.ReadLocalFile(_csvFilePath).ToList();
     }
 
-    public FileRepository(string filePath)
+    public FileRepository(string filePath, IFileReader reader)
     {
         _csvFilePath = filePath;
         if (string.IsNullOrWhiteSpace(filePath))
         {
             throw new ArgumentException("File path cannot be null or empty.", nameof(filePath));
         }
-        var reader = new FileReader(_csvFilePath);
-        _transactions = reader.ReadFile().ToList();
+        // var reader = new FileReader(_csvFilePath);
+        _transactions = reader.ReadLocalFile(_csvFilePath).ToList();
     }
 
     /// <summary>
@@ -151,4 +153,5 @@ public class FileRepository : IFileRepository
     {
         return _transactions.Where(t => t.BookingDate.Month == month).ToList();
     }
+
 }
