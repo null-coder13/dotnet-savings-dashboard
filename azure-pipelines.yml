@@ -16,6 +16,11 @@ variables:
 steps:
 - task: DotNetCoreCLI@2
   inputs:
+    command: 'restore'
+    projects: '$(buildPath)'
+    restoreArguments: '--configuration $(buildConfiguration)'
+- task: DotNetCoreCLI@2
+  inputs:
     command: 'build'
     arguments: '$(buildPath) --configuration $(buildConfiguration)'
 - task: DotNetCoreCLI@2
