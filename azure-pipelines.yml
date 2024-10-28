@@ -25,7 +25,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
-    arguments: '$(buildPath) --configuration $(buildConfiguration)'
+    arguments: '--configuration $(buildConfiguration)'
 
 - task: PublishPipelineArtifact@1
   inputs:
