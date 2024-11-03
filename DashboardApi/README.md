@@ -10,3 +10,8 @@
 
 ## For Docker Compose 
 1. In the command line, run `sudo docker compose up`.
+
+## Azure DevOps
+
+1. To run the agent in the raspberry pi, ssh into the pi and navigate to the ~/agent directory. Run the run.sh file.
+

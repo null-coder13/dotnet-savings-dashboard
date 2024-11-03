@@ -17,7 +17,7 @@ public class FileUploadController(
     {
         var transactions = fileReader.ReadFormFile(file).ToList();
 
-        var lastSavedTransaction = financesRepository.GetLastTransaction() ?? new SavedTransaction
+        var lastSavedTransaction = financesRepository.LastTransaction() ?? new SavedTransaction
         {
             BookingDate = DateTime.MinValue
         };

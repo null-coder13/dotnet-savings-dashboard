@@ -13,7 +13,7 @@ builder.Host.UseSerilog((hostingContext, loggerConfiguration) =>
         .ReadFrom.Configuration(hostingContext.Configuration)
         .Enrich.FromLogContext();
 });
-Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
+Serilog.Debugging.SelfLog.Enable(Console.WriteLine);
 
 builder.Services.AddTransient<GlobalErrorHandlingMiddeware>();
 builder.Services.AddTransient<RequestLogContextMiddleware>();
@@ -29,11 +29,11 @@ builder.Services.AddDbContext<FinancesDbContext>(options =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
-        builder =>
+        corsPolicyBuilder =>
         {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
+            corsPolicyBuilder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
         });
 });
 
@@ -69,4 +69,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

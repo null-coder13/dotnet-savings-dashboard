@@ -4,7 +4,10 @@ namespace DashboardApi.Models;
 
 public class Transaction
 {
-    [Name("Booking Date")]
+    [Name("Posting Date")]
+    public DateTime PostingDate { get; set; }
+    
+    [Name("Transaction Date")]
     public DateTime BookingDate { get; set; }
 
     [Name("Amount")]
