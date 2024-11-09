@@ -14,18 +14,14 @@ variables:
   buildPath: './DashboardApi'
 
 steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '$(buildPath)'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    arguments: '$(buildPath) --configuration $(buildConfiguration)'
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    arguments: '--configuration $(buildConfiguration) -r linux-arm -o ~/Test'
+- script: dotnet restore $(buildPath)
+  displayName: 'dotnet restore $(buildPath)'
+
+- script: dotnet build $(buildPath) --configuration $(buildConfiguration)
+  displayName: 'dotnet build $(buildPath) --configuration $(buildConfiguration)'
+  
+- script: dotnet publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o ~/Test
+  displayName: 'dotnet publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o ~/Test'
 
 - task: PublishPipelineArtifact@1
   inputs:
