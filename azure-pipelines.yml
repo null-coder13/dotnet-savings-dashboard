@@ -22,7 +22,7 @@ steps:
 - script: $(dotnet) build $(buildPath) --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildPath) --configuration $(buildConfiguration)'
   
-- script: $(dotnet) publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o $(outputPath)
+- script: sudo $(dotnet) publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o $(outputPath)
   displayName: 'dotnet publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o $(outputPath)'
 
 - script: sudo systemctl stop dashboardapi-kestrel.service
