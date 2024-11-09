@@ -12,15 +12,16 @@ pool:
 variables:
   buildConfiguration: 'Release'
   buildPath: './DashboardApi'
+  dotnet: /home/boba/.dotnet/dotnet
 
 steps:
-- script: dotnet restore $(buildPath)
+- script: $(dotnet) restore $(buildPath)
   displayName: 'dotnet restore $(buildPath)'
 
-- script: dotnet build $(buildPath) --configuration $(buildConfiguration)
+- script: $(dotnet) build $(buildPath) --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildPath) --configuration $(buildConfiguration)'
   
-- script: dotnet publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o ~/Test
+- script: $(dotnet) publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o ~/Test
   displayName: 'dotnet publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o ~/Test'
 
 - task: PublishPipelineArtifact@1
