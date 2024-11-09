@@ -13,7 +13,7 @@ variables:
   buildConfiguration: 'Release'
   buildPath: './DashboardApi'
   dotnet: /home/boba/.dotnet/dotnet
-  outputPath: /var/www/DashboardApi
+  outputPath: /home/boba/www/DashboardApi
 
 steps:
 - script: $(dotnet) restore $(buildPath)
@@ -22,7 +22,7 @@ steps:
 - script: $(dotnet) build $(buildPath) --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildPath) --configuration $(buildConfiguration)'
   
-- script: sudo $(dotnet) publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o $(outputPath)
+- script: $(dotnet) publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o $(outputPath)
   displayName: 'dotnet publish $(buildPath) --configuration $(buildConfiguration) -r linux-arm -o $(outputPath)'
 
 - script: sudo systemctl stop dashboardapi-kestrel.service
