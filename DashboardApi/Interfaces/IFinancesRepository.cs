@@ -8,12 +8,19 @@ public interface IFinancesRepository
     // Task AddTransactionAsync(Transaction transaction);
     // Task UpdateTransactionByIdAsync(int id, Transaction transaction);
     // Task DeleteTransactionByIdAsync(int id);
-    // Task<IEnumerable<Transaction>> GetTransactionsByMonthAsync(int month);
-    // Task<IEnumerable<Transaction>> GetTransactionsByCategoryAsync(int month);
-    // Task<IEnumerable<Transaction>> GetMonthlyTotalAmountsAsync();
-    // Task<IEnumerable<decimal>> GetAllTimeTotalAmountAndTimeSpanAsync(); // TODO: Change return type to a new model
+    // List<string> TransactionCategories();
+    decimal AverageSpending(int months);
+    SavedTransaction? LastTransaction();
+    Dictionary<string, decimal> MonthlyTotalAmountForYear(int year);
+    Dictionary<string, decimal> TotalAmountByCategoryByMonth(int year, int month);
+    decimal TotalAllTimeAmount();
+    decimal TotalAmountForMonth(int year, int month);
+    Dictionary<string, decimal> TotalIncomeAndSpendingForYear(int year);
+    decimal TotalSpendingForMonth(int year, int month);
+    Dictionary<string, decimal> TotalSpendingPerMonth(int year);
+    List<SavedTransaction> TransactionsForMonth(int year, int month);
     void UploadTransactions(List<SavedTransaction> transactions);
-    SavedTransaction? GetLastTransaction();
+    List<int> UniqueYears();
 
 
 
