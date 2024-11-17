@@ -5,7 +5,7 @@ using DashboardApi.Models;
 
 namespace DashboardApi.DataAccess;
 
-public class FinancesRepository(FinancesDbContext context, ILogger<FinancesRepository> logger)
+public class FinancesRepository(FinancesDbContext context)
     : IFinancesRepository
 {
     public Dictionary<string, decimal> TotalAmountByCategoryByMonth(int year, int month)

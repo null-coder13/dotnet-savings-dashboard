@@ -9,7 +9,6 @@ namespace DashboardApi.Controllers;
 [ApiController]
 public class TransactionController(
     ILogger<TransactionController> logger,
-    IFileRepository fileRepository,
     IFinancesRepository financesRepository)
     : Controller
 {
